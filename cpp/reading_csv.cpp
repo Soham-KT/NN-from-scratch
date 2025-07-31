@@ -1,33 +1,68 @@
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <sstream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
-int main(){
-    string filepath = "D:\\Codes\\Projects\\NN-from-scratch\\dataset\\dataset.csv";
-    string outputpath = "D:\\Codes\\Projects\\NN-from-scratch\\dataset\\hellokitty.txt";
-    ifstream data(filepath);
-    ofstream output(outputpath);
+class CsvReader {
+  int rows = 0, cols = 0;
 
-    bool firstLine = true;
-    string records;
-
-    while(data.peek() != EOF){
-        if (firstLine){
-          firstLine = false;
-          getline(data, records);
-          continue;  
-        }
-
-        getline(data, records);
-        if (records.empty()) continue; 
-        
-        cout << records << endl;
-        output << records << endl;
-        cout << firstLine << endl;
+  public:
+    int GetRows() const {
+      return rows;
     }
 
-    return 0;
+    int GetCols() const {
+      return cols;
+    }
+
+    vector<vector<int>> ReadCsv(string path){
+      ifstream file(path);
+      string line;
+      vector<vector<int>> data;
+
+      if (!getline(file, line)) {
+        cerr << "Error: File is empty or cannot read header.\n";
+        return data;
+      }
+
+      while (getline(file, line)) {
+        stringstream ss(line);
+        string cell;
+        vector<int> row;
+
+        while (getline(ss, cell, ',')) {
+          try {
+            row.push_back(stoi(cell));
+          } catch (const invalid_argument& e) {
+            cerr << "Invalid integer value: " << cell << '\n';
+            row.push_back(0);
+          }
+        }
+        data.push_back(row);
+      }
+
+      file.close();
+
+      rows = data.size();
+      cols = rows > 0 ? data[0].size() : 0;
+
+      return data;
+    }
+};
+
+
+int main() {
+  string abs_path = "D:\\Codes\\Projects\\NN-from-scratch\\dataset\\dataset.csv";
+
+  CsvReader csv_reader = CsvReader();
+  vector<vector<int>> table = csv_reader.ReadCsv(abs_path);
+
+  cout << table[0][0] << endl;
+
+  cout << "Rows: " << csv_reader.GetRows() << ", Columns: " << csv_reader.GetCols() << endl;
+
+  return 0;
 }
