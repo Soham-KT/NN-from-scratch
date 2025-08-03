@@ -54,15 +54,15 @@ class CsvReader {
 };
 
 
-int main() {
-  string abs_path = "D:\\Codes\\Projects\\NN-from-scratch\\dataset\\dataset.csv";
+// int main() {
+//   string abs_path = "D:\\Codes\\Projects\\NN-from-scratch\\dataset\\dataset.csv";
 
-  CsvReader csv_reader = CsvReader();
-  vector<vector<int>> table = csv_reader.ReadCsv(abs_path);
+//   CsvReader csv_reader = CsvReader();
+//   vector<vector<int>> table = csv_reader.ReadCsv(abs_path);
 
-  cout << table[0][0] << endl;
+//   cout << table[0][0] << endl;
 
-  cout << "Rows: " << csv_reader.GetRows() << ", Columns: " << csv_reader.GetCols() << endl;
+//   cout << "Rows: " << csv_reader.GetRows() << ", Columns: " << csv_reader.GetCols() << endl;
 
-  return 0;
-}
+//   return 0;
+// }
